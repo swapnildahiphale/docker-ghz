@@ -5,31 +5,9 @@ on:
     branches:
       - master
       - main
-  schedule:
-    - cron: "30 18 * * *"
-
 jobs:
-  check:
-    runs-on: ubuntu-latest
-    outputs:
-      tag: ${{ steps.get_tag.outputs.tag }}
-    env:
-      repo: swapnildahiphale/docker-ghz
-    steps:
-      - name: Get latest tag if more recent than latest DockerHub tag
-        id: get_tag
-        run: |
-          get_latest() {
-            local tag=$(/usr/bin/curl --silent "${{ github.api_url }}/repos/${{ env.repo }}/releases/latest" | /usr/bin/jq -r .tag_name)
-          }
-
-
-          echo "::set-output name=test::$(get_latest)"
-  
   docker:
-    if: needs.check.outputs.tag != ''
     runs-on: ubuntu-latest
-    needs: check
     steps:
       - name: Cache Docker build layers
         uses: actions/cache@v3
@@ -62,7 +40,7 @@ jobs:
           context: .
           push: true
           builder: ${{ steps.buildx.outputs.name }}
-          tags:  ${{ github.repository }}:${{ needs.check.outputs.tag }},${{ github.repository }}:latest
+          tags:  ${{ github.repository }}:1.0.0,${{ github.repository }}:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
-          build-args: APP_VERSION=${{ needs.check.outputs.tag }}
+          build-args: APP_VERSION=1.0.0
