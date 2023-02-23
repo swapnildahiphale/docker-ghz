@@ -14,7 +14,7 @@ jobs:
     outputs:
       tag: ${{ steps.get_tag.outputs.tag }}
     env:
-      repo: swapnildahiphale/ghz
+      repo: swapnildahiphale/docker-ghz
     steps:
       - name: Get latest tag if more recent than latest DockerHub tag
         id: get_tag
