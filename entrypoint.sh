@@ -7,5 +7,6 @@ if [ $? != 0 ]; then
   /go/bin/ghz -h
   exit 1 # Exit script after printing help
 else
-  exit 0
+  echo "Test ran successfully! Sleeping for 10000 days"
+  sleep 10000
 fi
